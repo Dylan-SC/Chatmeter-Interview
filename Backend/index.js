@@ -22,13 +22,14 @@ const cors = require('cors');
     });
 
     // get all of the saved search history
-    app.get('/get', (req, res) => {
+    app.get('/get-history', (req, res) => {
         const SelectQuery = " SELECT * FROM search_history";
         db.query(SelectQuery, (err, result) => {
             res.send(result)
         })
     })
 
+    // TODO: Switch this to be completed on Server side?
     // Add a recent successful search to the database
     app.post("/insert", (req, res) => {
         const websiteURL = req.body.setWebsiteURL;

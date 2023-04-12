@@ -2,6 +2,20 @@
   text-align: center;
 }
 
+.form{
+  padding: 10px 33%; /* Some padding */
+  display: grid;
+  grid-auto-flow: row;
+  grid-column-gap: 10px;
+}
+
+.history-buttons{
+  padding: 10px 33%; /* Some padding */
+  display: grid;
+  grid-auto-flow: column;
+  grid-column-gap: 10px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -25,7 +39,7 @@
 }
 
 .App-link {
-  color: #75fb61;
+  color: #0b5ed7;
 }
 
 @keyframes App-logo-spin {
