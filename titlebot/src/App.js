@@ -7,54 +7,34 @@ import axios from 'axios';
 // Importing these elements from bootstrap for the application layout
 import { Button, Container, Card, Row } from 'react-bootstrap';
 
-// Import Sass customization file
-import './custom.scss';
-
 class App extends Component {
   constructor(props) {
       super(props);
         this.state = {
-          setWebsiteURL: '',
-          setImageLink: '',
-          setWebsiteTitle: '',
-          fetchData: [],
-          reviewUpdate: ''
+          fetchData: []
       }
   }
 
-  handleChange = (event) => {
-    let nam = event.target.name;
-    let val = event.target.value
-    this.setState({
-      [nam]: val
-    })
-  }
-  
-  handleChange2 = (event) => {
-    this.setState({
-      reviewUpdate: event.target.value
-    })
-  }
-  
   //TODO: Switch this to be handled on the Server side?
-  // The submit button will use javascript to fetch website details and send it to the DB
-  // Flow:
-  //  Input the URL -> verify URL is good
-  //  Fetch website details using URL
-  //  Store details in DB using POST endpoint
-  //  Update the history box by calling the get-history endpoint
-  submit = () => {
-    axios.post('/api/insert', this.state)
-        .then(() => { alert('successfully posted') })
-    console.log(this.state)
-    document.location.reload();
-  }
-
-  componentDidMount() {
-    this.update()
-  }
+  // The submit button will send a URL to the backend to check validity & find website info
+  submit= () => {
+    var url = document.getElementById("setWebsiteURL");
+    if(url ===''){
+      alert('Please input a website URL into the input field.');
+    }
+    else{
+      //const webInfo = new WebInfo(url);
+      const webInfo = {url: url.stringify}
+      const json = JSON.stringify(webInfo);
+      axios.post('/api/insert', json)
+          .then(() => { alert('successfully posted') })
+      console.log(this.state)
+      document.location.reload();
+    }
+}
 
   // The check history button will fetch preexisting search history from DB if it exists
+  // Will be able to load history from previous sessions
   update = () => {
     axios.get("/api/get-history")
         .then((response) => {
@@ -73,30 +53,13 @@ class App extends Component {
   }
   
   render() {
-    let card = this.state.fetchData.map((val, key) => {
-        return (
-            <React.Fragment>
-                <Card style={{ width: '18rem' }} className='m-2'>
-                  <Card.Img orientation="top" src={val.ImageLink}/>
-                    <Card.Body>
-                        <Card.Title>{val.websiteTitle}</Card.Title>
-                        <Card.Text>
-                            {val.websiteURL}
-                        </Card.Text>
-                        <input name='reviewUpdate' onChange={this.handleChange2} placeholder='Update Review' ></input>
-                    </Card.Body>
-                </Card>
-            </React.Fragment>
-        )
-    })
-  
     return (
         <div className='App'>
             <h1>Title Bot</h1>
             <h6>Store a website's title and logo information</h6>
 
               <div className='form'>
-                  <input name='setWebsiteURL' placeholder='Enter Website URL' onChange={this.handleChange} />
+                  <input id='setWebsiteURL' placeholder='Enter Website URL' required />
                     
                   <div className="d-grid gap-2 col-3 mx-auto">
                     <Button className='my-2' variant="primary" onClick={this.submit}>Submit</Button> 
@@ -105,7 +68,7 @@ class App extends Component {
 
               <Container>
                   <Row>
-                      {card}
+                      {/* This is where the history will be displayed once the database is properly storing the URL */}
                   </Row>
               </Container>
 
