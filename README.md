@@ -1,10 +1,10 @@
 # Chatmeter-Interview: TITLEBOT
 > This is a take home assignment to guage my skills as a developer
 
-## TODO LIST
+## Initial Requirements
 - [x] Use React Native
 - [x] The backend should be RESTful
-- [ ] Satisfy visual requirements; Decent looking webpage
+- [x] Satisfy visual requirements; Decent looking webpage
 - [ ] Make the code readable; keep it organized
 - [ ] Scala/Java for backend
 - [x] Dockerize the application
@@ -33,3 +33,13 @@ Password: MYSQL_ROOT_PASSWORD
 Database: [LEAVE BLANK]
 ```
 - select Permanent login
+
+## TODO LIST
+- [ ] Remove NGINX from the repo - [deprecated]
+- [ ] Reorganize front end code to meet current industry standards
+- [ ] TitleBot functionality - get favicon + title
+- [ ] TitleBot functionality - store favicon + title into postgres
+- [ ] TitleBot functionality - Populate frontend with searched result
+- [ ] TitleBot functionality - Populate frontend with search history
+- [ ] Test that the delete functionality works well
+- [ ] Add error handling where necessary
