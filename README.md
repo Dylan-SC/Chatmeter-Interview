@@ -25,9 +25,11 @@ docker-compose up --build
 - once the docker-compose command has been run, do the following:
 - go to localhost:8000 in your webbrowser
 - sign in with the following credentials:
+```
 System: MySQL
 Server: mysql_db
 Username: root
 Password: MYSQL_ROOT_PASSWORD
 Database: [LEAVE BLANK]
+```
 - select Permanent login
