@@ -4,6 +4,7 @@ const cors = require('cors');
 
     const db = mysql.createPool({
         host: 'mysql_db', // the host name MYSQL_DATABASE: node_mysql
+        port: "3306",
         user: 'MYSQL_USER', // database user MYSQL_USER: MYSQL_USER
         password: 'MYSQL_PASSWORD', // database user password MYSQL_PASSWORD: MYSQL_PASSWORD
         database: 'history' // database name MYSQL_HOST_IP: mysql_db
@@ -19,7 +20,6 @@ const cors = require('cors');
     // This is the "home page router"
     app.get('/', (req, res) => {
         res.send('Hi There');
-        console.log(req);
     });
 
     // get all of the saved search history
@@ -36,14 +36,17 @@ const cors = require('cors');
     // store all the information in the database
     // MAYBE: send response to front end, have it update search history list
     app.post("/insert", (req, res) => {
-        console.log(req)
+        console.log(req.body)
         const websiteURL = req.body.url;
         // const imageLink = req.body.imageLink;
         // const websiteTitle = req.body.title;
         const imageLink = "test";
         const websiteTitle = "test";
-        const InsertQuery = "INSERT INTO search_history (website_url, image_link, website_title) VALUES (?, ?, ?)";
+        const InsertQuery = "INSERT INTO search_history (websiteURL, imageLink, websiteTitle) VALUES (?, ?, ?)";
         db.query(InsertQuery, [websiteURL, imageLink, websiteTitle], (err, result) => {
+          if(err){
+            console.log(err)
+          }
           console.log(result)
         })
       })
@@ -57,5 +60,5 @@ const cors = require('cors');
       })
 
     // This is the port the API will be exposed on when the server is running
-    app.listen('3001', () => { })
+    app.listen('3001', "0.0.0.0")
   

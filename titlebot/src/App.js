@@ -2,10 +2,14 @@ import './App.css';
 import React, { Component } from 'react';
 
 // used to process and handle incoming requests
-import axios from 'axios';
+import ax from 'axios';
 
 // Importing these elements from bootstrap for the application layout
-import { Button, Container, Card, Row } from 'react-bootstrap';
+import { Button, Container, Row } from 'react-bootstrap';
+
+const axios = ax.create({
+  baseURL: "http://0.0.0.0:3001",
+  headers: {'Content-Type': 'application/json'}})
 
 class App extends Component {
   constructor(props) {
@@ -17,16 +21,19 @@ class App extends Component {
 
   //TODO: Switch this to be handled on the Server side?
   // The submit button will send a URL to the backend to check validity & find website info
-  submit= () => {
-    var url = document.getElementById("setWebsiteURL");
+  submit= async () => {
+    console.log("hello")
+    var url = document.getElementById("setWebsiteURL").value;
     if(url ===''){
+      console.log("hellooo")
       alert('Please input a website URL into the input field.');
     }
     else{
+      console.log("helloooooooo")
       //const webInfo = new WebInfo(url);
-      const webInfo = {url: url.stringify}
-      const json = JSON.stringify(webInfo);
-      axios.post('/api/insert', json)
+      const webInfo = {url: url.toString()}
+      console.log(webInfo)
+      await axios.post('/insert', webInfo)
           .then(() => { alert('successfully posted') })
       console.log(this.state)
       document.location.reload();
@@ -36,7 +43,7 @@ class App extends Component {
   // The check history button will fetch preexisting search history from DB if it exists
   // Will be able to load history from previous sessions
   update = () => {
-    axios.get("/api/get-history")
+    axios.get("/get-history")
         .then((response) => {
             this.setState({
                 fetchData: response.data
@@ -47,7 +54,7 @@ class App extends Component {
   // The delete button clears the search history from the DB
   delete = () => {
     if (window.confirm("Do you want to clear the search history? ")) {
-        axios.delete(`/api/delete`)
+        axios.delete(`/delete`)
         document.location.reload()
     }
   }
