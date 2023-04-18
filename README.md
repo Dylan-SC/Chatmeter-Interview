@@ -1,7 +1,7 @@
 # Chatmeter-Interview: TITLEBOT
 > This is a take home assignment to guage my skills as a developer
 
-## Initial Requirements
+## Initial Project Requirements
 - [x] Use React Native
 - [x] The backend should be RESTful
 - [x] Satisfy visual requirements; Decent looking webpage
@@ -10,6 +10,13 @@
 - [x] Dockerize the application
 - [x] Persitent storage, either client or server side
 - [ ] basic unit testing
+
+## Initial Functionality Requirements
+- [x] Submit URL for processing
+- [ ] display Favicon and Title for correct URLs on Frontend
+- [x] Store search history into database
+- [ ] Ability to fetch persisted storage
+- [ ] Display previous search history from storage
 
 ## How to Setup and Run the Project
 - download the repository
