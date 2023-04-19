@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 
 // used to process and handle incoming requests
 import ax from 'axios';
-
 // Importing these elements from bootstrap for the application layout
 import { Button, Container, Row } from 'react-bootstrap';
 
+// establish AXIOS so that the upcoming calls reach the backend server
 const axios = ax.create({
   baseURL: "http://0.0.0.0:3001",
   headers: {'Content-Type': 'application/json'}})
@@ -19,42 +19,44 @@ class App extends Component {
       }
   }
 
-  //TODO: Switch this to be handled on the Server side?
-  // The submit button will send a URL to the backend to check validity & find website info
-  submit= async () => {
-    console.log("hello")
+  // The submit button will send a URL to the backend to:
+  //      - check the URL's validity
+  //      - Fetch associated website info
+  //      - Store information in database
+  onClickSubmitUrl= async () => {
+    //TODO: REPLACE DOCUMENT.getElementById - It is bad practice to get values like this
     var url = document.getElementById("setWebsiteURL").value;
-    if(url ===''){
-      console.log("hellooo")
-      alert('Please input a website URL into the input field.');
-    }
+    if(url ===''){alert('Please input a website URL into the input field.');}
     else{
-      console.log("helloooooooo")
-      //const webInfo = new WebInfo(url);
       const webInfo = {url: url.toString()}
-      console.log(webInfo)
       await axios.post('/insert', webInfo)
           .then(() => { alert('successfully posted') })
-      console.log(this.state)
+
+      //TODO: REPLACE THE RELOAD FUNCTION BELOW WITH SOMETHING BETTER
       document.location.reload();
     }
 }
 
-  // The check history button will fetch preexisting search history from DB if it exists
+  // The check history button will fetch preexisting search history from DB, if any
   // Will be able to load history from previous sessions
-  update = () => {
-    axios.get("/get-history")
+  onClickFetchHistory = async() => {
+    await axios.get("/get-history")
         .then((response) => {
             this.setState({
                 fetchData: response.data
             })
         })
+    //TODO: Add function to reload webpage with new information fetched
+
   }
 
   // The delete button clears the search history from the DB
-  delete = () => {
-    if (window.confirm("Do you want to clear the search history? ")) {
-        axios.delete(`/delete`)
+  onClickDeleteHistory = async() => {
+    if (window.confirm("Are you sure you want to clear ALL existing search history?")) {
+        await axios.delete(`/delete`)
+
+        //TODO: Upon successful delete, clear this.state.fetchData[]
+        //TODO: REPLACE THE RELOAD FUNCTION BELOW WITH SOMETHING BETTER
         document.location.reload()
     }
   }
@@ -69,7 +71,7 @@ class App extends Component {
                   <input id='setWebsiteURL' placeholder='Enter Website URL' required />
                     
                   <div className="d-grid gap-2 col-3 mx-auto">
-                    <Button className='my-2' variant="primary" onClick={this.submit}>Submit</Button> 
+                    <Button className='my-2' variant="primary" onClick={this.onClickSubmitUrl}>Submit</Button> 
                   </div>    
               </div>
 
@@ -80,8 +82,8 @@ class App extends Component {
               </Container>
 
               <div className ='history-buttons'>
-                <Button onClick={() => { this.delete() }}>Clear History</Button>
-                <Button onClick={() => { this.update() }}>Check History</Button>
+                <Button onClick={() => { this.onClickDeleteHistory() }}>Clear History</Button>
+                <Button onClick={() => { this.onClickFetchHistory() }}>Check History</Button>
               </div>
 
             <a

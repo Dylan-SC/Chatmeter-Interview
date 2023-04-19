@@ -5,10 +5,13 @@ x-common-variables: &common-variables
   MYSQL_USER: MYSQL_USER
   MYSQL_PASSWORD: MYSQL_PASSWORD
 
+# This is the network created so that the docker images can connect to one another
 networks:
   db_network:
 
 services:
+
+# This is the MySQL database that will store persisted data
   mysql_db:
     image: mysql
     restart: always
@@ -27,17 +30,7 @@ services:
     expose:
       - '3306'
 
-  # nginx:
-  #   depends_on:
-  #     - api
-  #     - client
-  #   restart: always
-  #   build:
-  #     dockerfile: Dockerfile
-  #     context: ./nginx
-  #   ports:
-  #     - "3050:80"
-
+# This is the backend API server that handles requests + database calls
   api:
     build:
       dockerfile: Dockerfile
@@ -55,6 +48,7 @@ services:
     networks:
       - db_network
 
+# This is the front end webpage: the UI
   client:
     stdin_open: true
     environment:
@@ -70,6 +64,7 @@ services:
     networks:
       - db_network
 
+# Used to check Postgres database from the browser 
   adminer:
       image: adminer:latest
       restart: unless-stopped

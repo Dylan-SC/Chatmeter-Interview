@@ -13,16 +13,12 @@ const cors = require('cors');
     const app = express();
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
+    app.use(cors()); // Enables CORS security headers
 
-    // Enables CORS security headers
-    app.use(cors());
+    // This is the "home page router" ; used to verify server is up
+    app.get('/', (req, res) => {res.send('Hi There! I am alive! :)');});
 
-    // This is the "home page router"
-    app.get('/', (req, res) => {
-        res.send('Hi There');
-    });
-
-    // get all of the saved search history
+    // get all of the saved search history from the database
     app.get('/get-history', (req, res) => {
         const SelectQuery = " SELECT * FROM search_history";
         db.query(SelectQuery, (err, result) => {
@@ -36,22 +32,28 @@ const cors = require('cors');
     // store all the information in the database
     // MAYBE: send response to front end, have it update search history list
     app.post("/insert", (req, res) => {
+
         console.log(req.body)
+
         const websiteURL = req.body.url;
         // const imageLink = req.body.imageLink;
         // const websiteTitle = req.body.title;
+
         const imageLink = "test";
         const websiteTitle = "test";
+
         const InsertQuery = "INSERT INTO search_history (websiteURL, imageLink, websiteTitle) VALUES (?, ?, ?)";
+
         db.query(InsertQuery, [websiteURL, imageLink, websiteTitle], (err, result) => {
-          if(err){
-            console.log(err)
-          }
+          
+          if(err){console.log(err)}
+
           console.log(result)
+
         })
       })
 
-    // Clear the search history table
+    // Clear the search history table in the database
     app.delete("/delete", (req, res) => {
         const DeleteQuery = "DELETE * FROM search_history";
         db.query(DeleteQuery, (err, result) => {

@@ -42,7 +42,7 @@ Database: [LEAVE BLANK]
 - select Permanent login
 
 ## TODO LIST
-- [ ] Remove NGINX from the repo - [deprecated]
+- [x] Remove NGINX from the repo - [deprecated]
 - [ ] Reorganize front end code to meet current industry standards
 - [ ] TitleBot functionality - get favicon + title
 - [ ] TitleBot functionality - store favicon + title into postgres
