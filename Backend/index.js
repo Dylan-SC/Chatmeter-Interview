@@ -22,7 +22,14 @@ const cors = require('cors');
     app.get('/get-history', (req, res) => {
         const SelectQuery = " SELECT * FROM search_history";
         db.query(SelectQuery, (err, result) => {
-            res.send(result)
+          if(err){
+            console.log(err)
+            res.send({status: 'FAILED', error: err})
+          }
+          else{
+            res.send({status: "PASSED", result: result})
+            console.log(result)
+          }
         })
     })
 
@@ -46,18 +53,29 @@ const cors = require('cors');
 
         db.query(InsertQuery, [websiteURL, imageLink, websiteTitle], (err, result) => {
           
-          if(err){console.log(err)}
-
-          console.log(result)
-
+          if(err){
+            console.log(err)
+            res.send({status: 'FAILED', error: err})
+          }
+          else{
+            res.send({status: "PASSED", result: result})
+            console.log(result)
+          }
         })
       })
 
     // Clear the search history table in the database
     app.delete("/delete", (req, res) => {
-        const DeleteQuery = "DELETE * FROM search_history";
+        const DeleteQuery = "DELETE FROM search_history";
         db.query(DeleteQuery, (err, result) => {
-          if (err) console.log(err);
+          if (err){
+            console.log(err);
+            res.send({status: 'FAILED', error: err})
+          }
+          else{
+            res.send({status: "PASSED", result: result})
+            console.log(result)
+          }
         })
       })
 

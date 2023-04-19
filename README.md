@@ -48,5 +48,6 @@ Database: [LEAVE BLANK]
 - [ ] TitleBot functionality - store favicon + title into postgres
 - [ ] TitleBot functionality - Populate frontend with searched result
 - [ ] TitleBot functionality - Populate frontend with search history
-- [ ] Test that the delete functionality works well
+- [x] Test that the delete history functionality works well
+- [x] Test that the check history functionality works well
 - [ ] Add error handling where necessary
