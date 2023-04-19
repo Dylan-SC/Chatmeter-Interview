@@ -15,8 +15,8 @@
 - [x] Submit URL for processing
 - [ ] display Favicon and Title for correct URLs on Frontend
 - [x] Store search history into database
-- [ ] Ability to fetch persisted storage
-- [ ] Display previous search history from storage
+- [x] Ability to fetch persisted storage
+- [x] Display previous search history from storage
 
 ## How to Setup and Run the Project
 - download the repository
@@ -47,7 +47,7 @@ Database: [LEAVE BLANK]
 - [ ] TitleBot functionality - get favicon + title
 - [ ] TitleBot functionality - store favicon + title into postgres
 - [ ] TitleBot functionality - Populate frontend with searched result
-- [ ] TitleBot functionality - Populate frontend with search history
+- [x] TitleBot functionality - Populate frontend with search history
 - [x] Test that the delete history functionality works well
 - [x] Test that the check history functionality works well
-- [ ] Add error handling where necessary
+- [x] Add error handling where necessary

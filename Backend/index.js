@@ -1,3 +1,38 @@
+//import Axios from 'axios';
+//import fetch from 'node-fetch';
+
+// const axios = Axios.create()
+async function fetchFavicon(url){
+  faviconUrl = 'https://s2.googleusercontent.com/s2/favicons?domain_url='+url;
+  try{
+    await app.get(faviconUrl)
+    .then((resp) => {
+      response = {status: 'PASSED', response: resp.toString()};
+      return response;
+    })
+  }
+  catch(err){
+    console.log(err);
+    response = {status: 'FAILED', response: err};
+    return response;
+  }
+}
+
+// fetchWebInfo = async(url) => {
+//   await fetch(url)
+//   .then((response) => {
+//     response = {status: 'PASSED', response: response};
+//     return response;
+//   })
+//   .catch((error) => {
+//     response = {status: 'FAILED', response: error};
+//     return response;
+//   })
+// }
+
+
+
+
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -43,26 +78,29 @@ const cors = require('cors');
         console.log(req.body)
 
         const websiteURL = req.body.url;
-        // const imageLink = req.body.imageLink;
-        // const websiteTitle = req.body.title;
 
-        const imageLink = "test";
-        const websiteTitle = "test";
+        // Running into CORS issue when fetching favicon?
+        const fetchFaviconLink = fetchFavicon(websiteURL)
+        if(fetchFaviconLink.status === "PASSED"){imageLink = fetchFaviconLink.response;}
+        else{var imageLink = "imageLink";}
+
+        var websiteTitle = "websiteTitle";
+
 
         const InsertQuery = "INSERT INTO search_history (websiteURL, imageLink, websiteTitle) VALUES (?, ?, ?)";
 
-        db.query(InsertQuery, [websiteURL, imageLink, websiteTitle], (err, result) => {
-          
-          if(err){
-            console.log(err)
-            res.send({status: 'FAILED', error: err})
-          }
-          else{
-            res.send({status: "PASSED", result: result})
-            console.log(result)
-          }
-        })
-      })
+          db.query(InsertQuery, [websiteURL, imageLink, websiteTitle], (err, result) => {
+            if(err){
+              console.log(err)
+              res.send({status: 'FAILED', error: err})
+            }
+            else{
+              res.send({status: "PASSED", result: result})
+              console.log(result)
+            }
+          })
+    })
+
 
     // Clear the search history table in the database
     app.delete("/delete", (req, res) => {

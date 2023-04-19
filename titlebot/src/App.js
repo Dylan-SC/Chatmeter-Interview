@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 // used to process and handle incoming requests
 import ax from 'axios';
 // Importing these elements from bootstrap for the application layout
-import { Button, Container, Row } from 'react-bootstrap';
+import { Button, Container} from 'react-bootstrap';
 
 // establish AXIOS so that the upcoming calls reach the backend server
 const axios = ax.create({
@@ -16,6 +16,8 @@ class App extends Component {
       super(props);
         this.state = {
           currentUrl: '',
+          currentFavicon: '',
+          currentTitle: '',
           fetchData: []
       }
   }
@@ -25,17 +27,26 @@ class App extends Component {
   //      - Fetch associated website info
   //      - Store information in database
   onClickSubmitUrl= async () => {
-    if(this.state.currentUrl ===''){alert('Please input a website URL into the input field.');}
+    const validatedURL = validateURL(this.state.currentUrl)
+    if((this.state.currentUrl ==='')||(validatedURL === false)){alert('Please input a valid website URL into the input field.');}
+
     else{
       const webInfo = {url: this.state.currentUrl}
       await axios.post('/insert', webInfo)
           .then((response) => {
-            if(response.data.status ==='PASSED'){alert('successfully posted')}
+            if(response.data.status ==='PASSED'){
+              alert('successfully posted')
+              //TODO: DISPLAY FAVICON + TITLE FOR SUCCESSFUL SUBMISSIONS
+            }
             else{
               if(response.data.status === "FAILED"){alert('There was an error submitting the request. Please check the console logs and try again.');}
               console.log(response)
+              //TODO: MAYBE DISPLAY A FAILED FAVICON + FAILED TITLE FOR UNSUCCESSFUL SUBMISSIONS?
             }
             console.log(this.state.currentUrl)
+            
+            //This will fetch and display history if it exists after clicking the submit button
+            this.onClickFetchHistory();
           })
     }
   }
@@ -84,6 +95,8 @@ class App extends Component {
 
 
               <div className='form'>
+                {/* TODO: GET CURRENT INFO FUNCTION WORKING ONCE FAVICON + TITLE CAN BE FETCHED */}
+                {/* <DisplayCurrentInfo currentInfo={this.state} /> */}
                 <input onChange={this.onChange} id='setWebsiteURL' placeholder='Enter Website URL' value={this.state.currentUrl}required />
               </div>
 
@@ -93,10 +106,8 @@ class App extends Component {
               </div>
 
 
-              <Container>
-                <Row>
-                  {/* This is where the history will be displayed once the database is properly storing the URL */}
-                </Row>
+              <Container className="container">
+                <WebInfoList fetchData={this.state.fetchData} />
               </Container>
 
 
@@ -117,6 +128,54 @@ class App extends Component {
 
         </div>
     );
+  }
+}
+
+function WebInfoList(props){
+  if(props.fetchData === []){
+    return
+  }
+  else{
+    return(
+      <ul className="list-group">
+        {
+          props.fetchData.map((entry, idx) => {
+            return(
+                <ul className="list-group list-group-horizontal">
+                  <li className="list-group-item" key={`${entry.id}-${idx}-imageLink`}>{entry.imageLink}</li>
+                  <li className="list-group-item" key={`${entry.id}-${idx}-websiteTitle`}>{entry.websiteTitle}</li>
+                  <li className="list-group-item" key={`${entry.id}-${idx}-websiteURL`}>{entry.websiteURL}</li>
+                </ul>
+            )
+          })
+        }
+      </ul>
+    )
+  }
+}
+
+function DisplayCurrentInfo(props){
+  if(props.currentInfo.currentUrl==='' || props.currentTitle==='' || props.currentFavicon===''){
+    return
+  }
+  else{
+    return(
+      <ul className="list-group list-group-horizontal">
+        <li className="list-group-item" key={`${props.currentInfo.currentUrl}--imageLink`}>{props.currentInfo.currentFavicon}</li>
+        <li className="list-group-item" key={`${props.currentInfo.currentUrl}--websiteTitle`}>{props.currentInfo.currentTitle}</li>
+        <li className="list-group-item" key={`${props.currentInfo.currentUrl}--websiteURL`}>{props.currentInfo.Url}</li>
+      </ul>
+    )
+  }
+}
+
+function validateURL(url){
+  try{
+    const validatedURL = new URL(url)
+    return true;
+  }
+  catch{
+    return false;
   }
 }
 
